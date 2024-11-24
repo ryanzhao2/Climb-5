@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, createContext, useContext, Dispatch
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Plane, Sphere, Text } from "@react-three/drei";
 import PinDropIcon from '@mui/icons-material/PinDrop';
+import Logo from './logo.svg';
 import {
   AppBar,
   Toolbar,
@@ -78,13 +79,13 @@ const Legend = () => (
       position: "absolute",
       top: 100,
       right: 30,
-      backgroundColor: "rgba(255, 255, 255, 0.9)",
+      backgroundColor: "transparent",
       padding: 2,
       borderRadius: 2,
       boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
     }}
   >
-    <Typography variant="h6" gutterBottom>
+    <Typography variant="h6" gutterBottom sx={{ color: "white" }}>
       Colors
     </Typography>
     {Object.entries(limbColors).map(([limb, color], index) => (
@@ -99,7 +100,9 @@ const Legend = () => (
             border: "1px solid #000",
           }}
         />
-        <Typography variant="body2">{limb}</Typography>
+          <Typography variant="body2" sx={{ color: "white" }}>
+          {limb}
+        </Typography>
       </Box>
     ))}
   </Box>
@@ -205,14 +208,34 @@ const AnimationControls = () => {
 
   return (
     <Box sx={{ position: "absolute", bottom: 80, left: 16 }}>
-      <IconButton color="primary" onClick={handlePlayPause}>
-        {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
-      </IconButton>
-      <IconButton color="primary" onClick={handleStepForward}>
-        <SkipNextIcon />
-      </IconButton>
-    </Box>
-  );
+   <IconButton
+      sx={{
+        backgroundColor: "white", // White background for the button
+        color: "black", // Icon color
+        "&:hover": {
+          backgroundColor: "rgba(200, 200, 200, 1)", // Slightly gray on hover
+        },
+        border: "1px solid rgba(0, 0, 0, 0.1)", // Optional subtle border for definition
+      }}
+      onClick={handlePlayPause}
+    >
+      {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+    </IconButton>
+    <IconButton
+      sx={{
+        backgroundColor: "white", // White background for the button
+        color: "black", // Icon color
+        "&:hover": {
+          backgroundColor: "rgba(200, 200, 200, 1)", // Slightly gray on hover
+        },
+        border: "1px solid rgba(0, 0, 0, 0.1)", // Optional subtle border for definition
+      }}
+      onClick={handleStepForward}
+    >
+      <SkipNextIcon />
+    </IconButton>
+  </Box>
+);
 };
 
 // Main Component
@@ -339,66 +362,144 @@ const ClimbingRoute3DApp = () => {
           background: "linear-gradient(to right, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e)",
         }}
       >
-        <AppBar position="static" sx={{ backgroundColor: "#ffffff", boxShadow: "none" }}>
-          <Toolbar>
-            <Typography variant="h5" sx={{ color: "#000000" }}>
-              Climb 5
-            </Typography>
-          </Toolbar>
-        </AppBar>
+<AppBar position="static" sx={{ backgroundColor: "transparent", boxShadow: "none" }}>
+  <Toolbar>
+    <Box
+      component="img"
+      src={Logo}
+      alt="Logo"
+      sx={{
+        height: 40, // Adjust the size of your logo as needed
+        marginRight: 2, // Adds spacing to the right of the logo if needed
+      }}
+    />
+    <Typography variant="h5" sx={{ color: "transparent", flexGrow: 1 }}>
+      {/* Optional title text or leave this empty */}
+    </Typography>
+  </Toolbar>
+</AppBar>
+
+
 
         <Legend />
 
-        <SpeedDial ariaLabel="Menu Actions" sx={{ position: "absolute", bottom: 16, right: 16 }} icon={<SaveIcon />}>
+        {/* Speed Dial */}
+
+<SpeedDial
+  ariaLabel="Menu Actions"
+  sx={{
+    position: "absolute",
+    bottom: 16,
+    right: 16,
+    backgroundColor: "transparent", // White background for the button
+    "& .MuiFab-primary": {
+      backgroundColor: "white", // Ensure the SpeedDial FAB is white
+      color: "black", // Black icon color
+      "&:hover": {
+        backgroundColor: "rgba(200, 200, 200, 1)", // Slightly gray on hover
+      },
+    },
+  }}
+  icon={<SaveIcon sx={{ color: "black" }} />} // Black icon color
+>
           <SpeedDialAction icon={<SaveIcon />} tooltipTitle="Export Holds" onClick={exportHolds} />
-          <SpeedDialAction icon={<UploadFileIcon />} tooltipTitle="Upload Model" onClick={() => fileInputRef.current?.click()} />
-          <SpeedDialAction icon={<ClearIcon />} tooltipTitle="Clear Holds" onClick={clearHolds} />
+          <SpeedDialAction 
+    icon={<UploadFileIcon />} 
+    tooltipTitle="Upload Model" 
+    onClick={() => fileInputRef.current?.click()} 
+  />          <SpeedDialAction icon={<ClearIcon />} tooltipTitle="Clear Holds" onClick={clearHolds} />
           <SpeedDialAction icon={<ZoomOutMapIcon />} tooltipTitle="Reset Zoom" onClick={resetZoom} />
           <SpeedDialAction icon={<ColorLensIcon />} tooltipTitle="Change Color" onClick={() => setOpenColorPicker(true)} />
           <SpeedDialAction icon={<DeleteIcon />} tooltipTitle="Remove Hold" onClick={handleRemoveHold} />
         </SpeedDial>
 
-        {selectedHoldId !== null && (
-          <Fab
-            color="primary"
-            aria-label="climb-mapping"
-            sx={{ position: "absolute", bottom: 15, right: 160 }}
-            onClick={() => setNotification({ open: true, message: "Starting hold set!" })}
-          >
-            <PinDropIcon />
-          </Fab>
-        )}
+        <Box
+  sx={{
+    position: "absolute",
+    top: 100, // Adjust as needed
+    left: 20, // Adjust as needed
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent", // Transparent background
+    padding: 2,
+    zIndex: 1000, // Ensure the box is on top
+  }}
+>
+  <Button
+    variant="contained"
+    color="primary"
+    component="label"
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      textTransform: "none",
+      fontWeight: "bold",
+      backgroundColor: "transparent", // Fully transparent background
+      pointerEvents: "auto", // Ensure the button is clickable
+    }}
+  >
+    Upload 3D Model
+    <Input
+      type="file"
+      inputProps={{ accept: ".glb" }}
+      onChange={(event) => {
+        const fileInput = event.target as HTMLInputElement;
+        const file = fileInput.files?.[0];
+        if (file && file.name.endsWith(".glb")) {
+          const loader = new GLTFLoader();
+          loader.load(URL.createObjectURL(file), (gltf) => {
+            setBackgroundModel(gltf.scene);
+            setNotification({ open: true, message: "3D Model loaded successfully!" });
+          });
+        } else {
+          setNotification({ open: true, message: "Please upload a GLB file!" });
+        }
+      }}
+      sx={{ display: "none" }} // Hide the actual input
+    />
+  </Button>
+</Box>
 
-        {/* File Input for Model Upload */}
-        <Box>
-          <Input type="file" inputProps={{ accept: ".glb" }} onChange={(event) => {
-            const fileInput = event.target as HTMLInputElement;
-            const file = fileInput.files?.[0];            
-            if (file && file.name.endsWith(".glb")) {
-              const loader = new GLTFLoader();
-              loader.load(URL.createObjectURL(file), (gltf) => {
-                setBackgroundModel(gltf.scene);
-                setNotification({ open: true, message: "3D Model loaded successfully!" });
-              });
-            } else {
-              setNotification({ open: true, message: "Please upload a GLB file!" });
-            }
-          }} ref={fileInputRef} />
-        </Box>
 
-        {/* Scale Slider */}
-        <Box sx={{ width: 300, position: "absolute", bottom: 150, left: 16, zIndex: 1, bgcolor: 'white', p: 1, borderRadius: 1 }}>
-          <Typography gutterBottom>Scale Model</Typography>
-          <Slider
-            value={modelScale}
-            onChange={(e, newValue) => setModelScale(newValue as number)}
-            step={0.1}
-            min={0.1}
-            max={5}
-            valueLabelDisplay="auto"
-          />
-        </Box>
-
+{/* Scale Slider */}
+<Box
+  sx={{
+    width: 300,
+    position: "absolute",
+    bottom: 150,
+    left: 16,
+    zIndex: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.1)", // Semi-transparent white background
+    padding: 1,
+    borderRadius: 1,
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", // Optional shadow
+    backdropFilter: "blur(8px)", // Optional blur effect
+  }}
+>
+  <Typography gutterBottom sx={{ color: "white", fontWeight: "bold" }}>
+    Scale Model
+  </Typography>
+  <Slider
+    value={modelScale}
+    onChange={(e, newValue) => setModelScale(newValue as number)}
+    step={0.1}
+    min={0.1}
+    max={5}
+    valueLabelDisplay="auto"
+    sx={{
+      color: "white", // Changes the color of the slider track and thumb
+      "& .MuiSlider-thumb": {
+        border: "2px solid white", // Adds a white border around the slider thumb
+      },
+      "& .MuiSlider-valueLabel": {
+        color: "white", // Ensures value labels are white
+        backgroundColor: "rgba(0, 0, 0, 0.5)", // Optional dark background for value labels
+      },
+    }}
+  />
+</Box>
         <Canvas camera={{ position: [0, 4, 20], fov: 50 }} style={{ width: "100%", height: "100vh" }}>
           <OrbitControls ref={orbitControlsRef} minDistance={5} maxDistance={30} />
           <ambientLight intensity={0.5} />
