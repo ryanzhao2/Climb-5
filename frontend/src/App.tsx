@@ -366,18 +366,18 @@ const ClimbingRoute3DApp = () => {
   <Toolbar>
     <Box
       component="img"
-      src={Logo}
+      src={Logo} // Path to your logo
       alt="Logo"
       sx={{
-        height: 40, // Adjust the size of your logo as needed
-        marginRight: 2, // Adds spacing to the right of the logo if needed
+        height: 150, // Increase height to make it bigger
+        width: "auto", // Maintain aspect ratio
+        marginLeft: -6, // Push the logo to the right
+        marginRight: "auto", // Optional: Spacing from the right edge
       }}
     />
-    <Typography variant="h5" sx={{ color: "transparent", flexGrow: 1 }}>
-      {/* Optional title text or leave this empty */}
-    </Typography>
   </Toolbar>
 </AppBar>
+
 
 
 
